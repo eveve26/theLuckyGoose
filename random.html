@@ -206,9 +206,14 @@
 
     
     function random() {
+
+        if (document.getElementById("playerNum").value != currentPlayerNumber){
+            setPlayer();
+        }
         const totalPlayer = document.getElementById("playerContainer").children.length;
         const showeach = document.getElementById("showeach").checked;
         const round = document.getElementById("round").value;
+
 
         document.getElementById("rbox").innerHTML = '';
         document.getElementById("displayShowEach").innerHTML = '';
