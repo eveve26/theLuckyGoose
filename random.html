@@ -7,8 +7,11 @@
                     <input type="checkbox" id="showeach">看每次結果
                 </label>
             </div>
+            <input placeholder="多少人" class="inputbox" id="playerNum"/>
+            <button onclick="" class="buttons" id="playerNumButton">ok</button>
             <button id="dec" class="buttons">-</button><button id="inc" class="buttons">+</button>
-            <input placeholder="幾次" id="round" class="inputbox" maxlength="5">
+            <div style="height: 20px;"></div>
+            <input placeholder="幾次" id="round" class="inputbox" maxlength="5"/>
             <button onclick="random()" class="buttons">催</button>
             <div id="playerContainer"></div>
             <div id="displayShowEach" style="display: none;"></div>
@@ -27,6 +30,15 @@
         display:flex;
         background-color: #F1F0EC;
         height: 100%;
+    }
+    @media (max-width: 600px)  {
+        #container{
+        overflow-x: scroll;
+        display:flex;
+        flex-direction: column-reverse;
+        background-color: #F1F0EC;
+        height: 100%;
+        }
     }
     #lbox{
         flex: 2;
@@ -112,12 +124,40 @@
 </style>
 <script>
 
+    var currentPlayerNumber=0;
+    function setPlayer() {
+        var number = document.getElementById("playerNum").value;
+        if (!number) {
+            return;
+        }
+        if (isNaN(number)){
+            alert("阿拉伯數字數字數字");
+            return;
+        }
+        document.getElementById("playerContainer").innerHTML='';
+        var currentPlayer = 1;
+
+        while (number>0){
+            number--;
+            const newPlayer = document.createElement("input");
+            newPlayer.classList.add("inputbox");
+            newPlayer.placeholder="player "+(currentPlayer);
+            newPlayer.id="player"+(currentPlayer);
+            newPlayer.maxLength="30";
+            document.getElementById("playerContainer").appendChild(newPlayer);
+            currentPlayer++;
+        }
+        currentPlayerNumber=currentPlayer-1;
+    }
+    document.getElementById("playerNumButton").addEventListener('click', () => setPlayer())
+
     document.getElementById("inc").addEventListener('click', (event) => {
         event.target.blur();
         inc()
     });
 
     function inc() {
+        document.getElementById("playerNum").value=++currentPlayerNumber;
         const currentPlayer = document.getElementById("playerContainer").children.length;
         const newPlayer = document.createElement("input");
         newPlayer.classList.add("inputbox");
@@ -142,6 +182,7 @@
         }
         const last = container.lastChild;
         if (last) {
+            document.getElementById("playerNum").value=--currentPlayerNumber;
             container.removeChild(last);
         } 
     }
@@ -160,7 +201,7 @@
 
     
     function random() {
-
+        setPlayer()
         const totalPlayer = document.getElementById("playerContainer").children.length;
         const showeach = document.getElementById("showeach").checked;
         const round = document.getElementById("round").value;
