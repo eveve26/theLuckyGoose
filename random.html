@@ -7,11 +7,11 @@
                     <input type="checkbox" id="showeach">看每次結果
                 </label>
             </div>
-            <input placeholder="多少人" class="inputbox" id="playerNum"/>
+            <a class="inputGuide">人數</a><input placeholder="多少人" class="inputbox" id="playerNum"/>
             <button onclick="" class="buttons" id="playerNumButton">ok</button>
             <button id="dec" class="buttons">-</button><button id="inc" class="buttons">+</button>
             <div style="height: 20px;"></div>
-            <input placeholder="幾次" id="round" class="inputbox" maxlength="5"/>
+            <a class="inputGuide">次數</a><input placeholder="幾次" id="round" class="inputbox" maxlength="5"/>
             <button onclick="random()" class="buttons">催</button>
             <div id="playerContainer"></div>
             <div id="displayShowEach" style="display: none;"></div>
@@ -49,6 +49,10 @@
     }
     #showeach{
         margin-bottom: 20px;
+    }
+    .inputGuide{
+        font-size: 16px;
+        margin-right: 10px;
     }
     #displayShowEach{
         background-color: #5F4B8B;
@@ -126,6 +130,7 @@
 
     var currentPlayerNumber=0;
     function setPlayer() {
+        console.log("set")
         var number = document.getElementById("playerNum").value;
         if (!number) {
             return;
