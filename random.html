@@ -130,13 +130,16 @@
 
     var currentPlayerNumber=0;
     function setPlayer() {
-        console.log("set")
         var number = document.getElementById("playerNum").value;
         if (!number) {
             return;
         }
         if (isNaN(number)){
             alert("阿拉伯數字數字數字");
+            return;
+        }
+        if (number<=1) {
+            alert("醬能抽什麼東西");
             return;
         }
         document.getElementById("playerContainer").innerHTML='';
