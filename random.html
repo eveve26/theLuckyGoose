@@ -1,0 +1,235 @@
+<html>
+
+    <div id="container">
+        <div id="lbox">
+            <div id="showeachContainer">
+                <label>
+                    <input type="checkbox" id="showeach">看每次結果
+                </label>
+            </div>
+            <button id="dec" class="buttons">-</button><button id="inc" class="buttons">+</button>
+            <input placeholder="幾次" id="round" class="inputbox" maxlength="5">
+            <button onclick="random()" class="buttons">催</button>
+            <div id="playerContainer"></div>
+            <div id="displayShowEach" style="display: none;"></div>
+
+        </div>
+        <div id="rbox"></div>
+    </div>
+
+
+
+
+</html>
+<style>
+    #container{
+        overflow-x: scroll;
+        display:flex;
+        background-color: #F1F0EC;
+        height: 100%;
+    }
+    #lbox{
+        flex: 2;
+        color: #5F4B8B;
+        margin-top: 30px;
+        margin-left: 30px;
+        font-size: 20px;
+    }
+    #showeach{
+        margin-bottom: 20px;
+    }
+    #displayShowEach{
+        background-color: #5F4B8B;
+        color: #F1F0EC;
+        border-radius: 10px;
+        height: 300px;
+        max-height: 500px;
+        width: 400px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        overflow-y: auto;
+    }
+    #rbox{
+        flex:1;
+
+    }
+    #rboxTop{
+        color: #5F4B8B;
+        background-color: #00B0C9;
+        margin-right: 50px;
+        margin-top: 80px;
+        padding-left: 20px;
+        padding-top: 10px;
+        min-height: 200px;
+        border-radius: 20px;
+        font-size: 30px;
+        overflow: auto;
+        max-height: fit-content;
+    }
+    #rboxBottom{
+        color: #5F4B8B;
+        background-color: #00B0C9;
+        margin-right: 50px;
+        margin-top: 80px;
+        padding-left: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-height: 200px;
+        border-radius: 20px;
+        font-size: 30px;
+        overflow: auto;
+        max-height: fit-content;   
+    }
+    .inputbox{
+        font-size: 16px;
+        background-color: #5F4B8B;
+        color: #F1F0EC;
+        padding-left: 10px;
+        margin-bottom: 20px;
+        margin-right: 10px;
+        border-radius: 10px;
+        height: 30px;
+    }
+    .inputbox::placeholder{
+        color: #F1F0EC;
+    }
+    .inputbox:focus, .inputbox:hover{
+        background-color: #412e6b;
+    }
+    .buttons{
+        font-size: 16px;
+        background-color: #00B0C9;
+        color: #F1F0EC;
+        border-radius: 10px;
+        height: 30px;
+        width: 60px;
+        margin-right: 10px;
+    }
+    .buttons:hover{
+        background-color: #148d9d;
+    }
+</style>
+<script>
+
+    document.getElementById("inc").addEventListener('click', (event) => {
+        event.target.blur();
+        inc()
+    });
+
+    function inc() {
+        const currentPlayer = document.getElementById("playerContainer").children.length;
+        const newPlayer = document.createElement("input");
+        newPlayer.classList.add("inputbox");
+        newPlayer.placeholder="player "+(currentPlayer+1);
+        newPlayer.id="player"+(currentPlayer+1);
+        newPlayer.maxLength="30";
+        document.getElementById("playerContainer").appendChild(newPlayer);
+    }
+
+
+
+    document.getElementById("dec").addEventListener('click', (event) => {
+        event.target.blur();
+        dec()
+    });
+
+    function dec() {
+        const container = document.getElementById("playerContainer");
+        if (container.children.length<=2){
+            alert("醬子是要抽什麼啦?");
+            return;
+        }
+        const last = container.lastChild;
+        if (last) {
+            container.removeChild(last);
+        } 
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if ((event.key =='+' || event.key == '=') && document.activeElement.tagName !== "INPUT"){
+            inc();
+        }
+        else if (event.key == '-' && document.activeElement.tagName !== "INPUT"){
+            dec();
+        } 
+        else if (event.key == "Enter"){
+            random();
+        }
+    })
+
+    
+    function random() {
+
+        const totalPlayer = document.getElementById("playerContainer").children.length;
+        const showeach = document.getElementById("showeach").checked;
+        const round = document.getElementById("round").value;
+
+        document.getElementById("rbox").innerHTML = '';
+        document.getElementById("displayShowEach").innerHTML = '';
+        if (showeach) {
+            document.getElementById("displayShowEach").style.display='block';
+        } else {
+            document.getElementById("displayShowEach").style.display='none';
+        }
+
+        
+        if (isNaN(round)){
+            alert("阿拉伯數字數字數字");
+            return;
+        }
+        if (round.trim()===""){
+            alert("抽幾次啦");
+            return;
+        }
+        const container = document.getElementById("playerContainer");
+        if (container.children.length<2){
+            alert("是要抽什麼啦?");
+            return;
+        }
+        
+
+        const rboxTop = document.createElement("div");
+        rboxTop.id="rboxTop";
+        rboxTop.textContent="幸運鵝:";
+        const rboxBottom = document.createElement("div");
+        rboxBottom.id="rboxBottom";
+        rboxBottom.textContent="統計:";
+        document.getElementById("rbox").appendChild(rboxTop);
+        document.getElementById("rbox").appendChild(rboxBottom);
+
+        var count=new Array(totalPlayer).fill(0);
+        for (var i=1; i<round; i++){
+            const randomNumber = Math.floor(Math.random()*totalPlayer);
+            count[randomNumber]+=1;
+
+            if (showeach){
+                    const result = document.createElement('div');
+                    const player = document.getElementById("player"+(randomNumber+1)).value;
+                    result.textContent = "round "+i+" player "+(randomNumber+1)+" "+player;
+                    document.getElementById("displayShowEach").appendChild(result);
+            }
+            
+        }
+        
+            const randomNumber = Math.floor(Math.random()*totalPlayer);
+            count[randomNumber]+=1;
+            const result = document.createElement('div');
+            const player = document.getElementById("player"+(randomNumber+1)).value;
+
+            result.textContent = "player "+(randomNumber+1)+" "+player;
+            document.getElementById("rboxTop").appendChild(result);
+            
+            for (var j=1; j<=totalPlayer; j++){
+                const player = document.getElementById("player"+j).value;
+                const countPlayer = document.createElement('div');
+                countPlayer.textContent="player "+(j)+" "+player+": "+count[j-1];
+                document.getElementById("rboxBottom").appendChild(countPlayer);
+            }
+
+
+        
+        
+
+    }
+</script>
